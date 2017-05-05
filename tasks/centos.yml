@@ -1,0 +1,22 @@
+---
+# tasks file for installing flannel on centos7
+
+- name: install flannel releated package
+  yum: name={{ item }} state=present
+  with_items:
+    - docker
+    - flannel
+
+- name: include tls.yml
+  include: tls.yml
+  when: flannel_etcd_tls_enabled is defined and flannel_etcd_tls_enabled == "true"
+
+- name: template /etc/sysconfig/flanneld
+  template: src=etc/sysconfig/flanneld.j2 dest=/etc/sysconfig/flanneld mode=644 backup=yes
+  notify: restart flannel
+
+- name: start and enable flannel and docker
+  service: name={{ item }} state=started enabled=yes
+  with_items:
+    - docker
+    - flanneld

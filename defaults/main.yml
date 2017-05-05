@@ -1,0 +1,9 @@
+---
+# defaults file for flannel
+
+flannel_data_dir: /var/lib/flannel/{{ ansible_hostname }}.flannel
+
+flannel_protocol: http
+flannel_tls_enabled: 'false'
+
+flannel_root_password: ""
